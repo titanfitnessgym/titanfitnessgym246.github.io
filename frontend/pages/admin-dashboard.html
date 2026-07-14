@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Titan Fitness — Admin</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="dot"></span>TITAN FITNESS<span class="badge badge-warning" style="margin-left:auto;">Admin</span></div>
+    <div class="nav-link active" data-section="overview">Dashboard</div>
+    <div class="nav-section-label">Members</div>
+    <div class="nav-link" data-section="members">All Members</div>
+    <div class="nav-link" data-section="admissions">Admissions</div>
+    <div class="nav-section-label">Operations</div>
+    <div class="nav-link" data-section="plans">Membership Plans</div>
+    <div class="nav-link" data-section="trainers">Trainers</div>
+    <div class="nav-link" data-section="announcements">Announcements</div>
+    <div class="nav-link" data-section="support">Support</div>
+    <div class="nav-section-label">Insights</div>
+    <div class="nav-link" data-section="reports">Reports</div>
+    <div class="nav-link" id="logout-link" style="margin-top:auto;color:var(--danger)">Log out</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h1 id="section-title">Dashboard</h1>
+      <div class="badge badge-muted mono" id="admin-clock">—</div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section id="section-overview">
+      <div class="grid grid-4" id="stats-grid">
+        <div class="card"><div class="skeleton" style="height:70px"></div></div>
+        <div class="card"><div class="skeleton" style="height:70px"></div></div>
+        <div class="card"><div class="skeleton" style="height:70px"></div></div>
+        <div class="card"><div class="skeleton" style="height:70px"></div></div>
+      </div>
+      <div class="grid grid-2 mt-24">
+        <div class="card stat-tile"><div class="label">Pending Admissions</div><div class="value" id="stat-pending-admissions">—</div></div>
+        <div class="card stat-tile"><div class="label">Today's Attendance</div><div class="value" id="stat-today-attendance">—</div></div>
+      </div>
+    </section>
+
+    <!-- MEMBERS -->
+    <section id="section-members" style="display:none">
+      <div class="flex justify-between items-center gap-16 mt-8" style="flex-wrap:wrap;">
+        <input id="member-search" placeholder="Search by name or member ID…" style="max-width:320px" />
+        <select id="member-status-filter" style="max-width:200px">
+          <option value="">All statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="pending_approval">Pending approval</option>
+          <option value="suspended">Suspended</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" id="export-csv-btn">Export CSV</button>
+      </div>
+      <div class="card mt-16 table-wrap">
+        <table>
+          <thead><tr><th>Member ID</th><th>Name</th><th>Status</th><th>Plan</th><th>Renewal</th><th>Actions</th></tr></thead>
+          <tbody id="members-table"><tr><td colspan="6" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SUPPORT -->
+    <section id="section-support" style="display:none">
+      <div class="flex justify-between items-center gap-16 mt-8" style="flex-wrap:wrap;">
+        <input id="support-search" placeholder="Search tickets…" style="max-width:320px" />
+        <select id="support-status-filter" style="max-width:200px">
+          <option value="">All statuses</option>
+          <option value="open">Open</option>
+          <option value="pending">Pending</option>
+          <option value="resolved">Resolved</option>
+        </select>
+      </div>
+      <div id="support-tickets-list" class="grid grid-2 mt-16"></div>
+    </section>
+
+    <!-- ADMISSIONS -->
+    <section id="section-admissions" style="display:none">
+      <form id="member-create-form" class="card" style="max-width:900px">
+        <div class="card-title">Create Member Account</div>
+        <div class="field-row">
+          <div class="field"><label>Full name</label><input required name="fullName" /></div>
+          <div class="field"><label>Mobile number</label><input required name="mobile" type="tel" pattern="[0-9]{10}" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Email</label><input required name="email" type="email" /></div>
+          <div class="field"><label>Password</label><input required name="password" type="password" minlength="8" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Date of birth</label><input required name="dob" type="date" /></div>
+          <div class="field"><label>Gender</label><select required name="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+        </div>
+        <div class="field"><label>Address</label><input required name="address" /></div>
+        <div class="field-row">
+          <div class="field"><label>Emergency contact</label><input required name="emergencyContact" /></div>
+          <div class="field"><label>Blood group</label><input required name="bloodGroup" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Fitness goal</label><input required name="fitnessGoal" /></div>
+          <div class="field"><label>Height (cm)</label><input required name="height" type="number" /></div>
+          <div class="field"><label>Weight (kg)</label><input required name="weight" type="number" /></div>
+        </div>
+        <div class="field"><label>Medical conditions (optional)</label><textarea name="medicalConditions" rows="2"></textarea></div>
+        <div class="field-row">
+          <div class="field"><label>Join date</label><input required name="joinDate" type="date" /></div>
+          <div class="field"><label>Join time</label><input required name="joinTime" type="time" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Membership Plan</label><select required name="planId" id="plan-select-create"></select></div>
+          <div class="field"><label>Initial Status</label><select name="status" id="initial-status-select">
+            <option value="pending_approval">Pending Approval</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Member</button>
+      </form>
+      <div id="admissions-list" class="grid grid-2 mt-16"></div>
+    </section>
+
+    <!-- PLANS -->
+    <section id="section-plans" style="display:none">
+      <form id="plan-form" class="card mt-16" style="max-width:600px">
+        <div class="card-title">Create a Plan</div>
+        <div class="field-row">
+          <div class="field"><label>Name</label><input required name="name" placeholder="Quarterly" /></div>
+          <div class="field"><label>Category</label>
+            <select name="category"><option>monthly</option><option>quarterly</option><option>half-yearly</option><option>annual</option><option>premium</option><option>pt-package</option></select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Duration (days)</label><input required type="number" name="durationDays" /></div>
+          <div class="field"><label>Price (₹)</label><input required type="number" name="price" /></div>
+        </div>
+        <div class="field"><label>Features (comma-separated)</label><input name="features" placeholder="Locker access, 2 PT sessions" /></div>
+        <button type="submit" class="btn btn-primary">Add Plan</button>
+      </form>
+      <div id="plans-list" class="grid grid-3 mt-16"></div>
+    </section>
+
+    <!-- TRAINERS -->
+    <section id="section-trainers" style="display:none">
+      <form id="trainer-form" class="card mt-16" style="max-width:600px">
+        <div class="card-title">Add Trainer</div>
+        <div class="field-row">
+          <div class="field"><label>Name</label><input required name="name" /></div>
+          <div class="field"><label>Mobile</label><input required name="mobile" /></div>
+        </div>
+        <div class="field"><label>Specialty</label><input required name="specialty" placeholder="Strength & Conditioning" /></div>
+        <button type="submit" class="btn btn-primary">Add Trainer</button>
+      </form>
+      <div id="trainers-list" class="grid grid-3 mt-16"></div>
+    </section>
+
+    <!-- ANNOUNCEMENTS -->
+    <section id="section-announcements" style="display:none">
+      <form id="announcement-form" class="card mt-16" style="max-width:600px">
+        <div class="card-title">New Announcement</div>
+        <div class="field"><label>Title</label><input required name="title" /></div>
+        <div class="field">
+          <label>Category</label>
+          <select name="category"><option value="notice">Notice</option><option value="offer">Offer</option><option value="competition">Competition</option><option value="holiday">Holiday</option></select>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Priority</label><select name="priority"><option value="low">Low</option><option value="normal" selected>Normal</option><option value="high">High</option></select></div>
+          <div class="field"><label>Due date</label><input name="dueDate" type="date" /></div>
+          <div class="field"><label>Due time</label><input name="dueTime" type="time" /></div>
+        </div>
+        <div class="field-row">
+          <label class="flex items-center gap-8"><input type="checkbox" name="pinned" style="width:auto;" /> Pin announcement</label>
+          <label class="flex items-center gap-8"><input type="checkbox" name="active" style="width:auto;" checked /> Active</label>
+        </div>
+        <div class="field"><label>Message</label><textarea required name="message" rows="3"></textarea></div>
+        <button type="submit" class="btn btn-primary">Post Announcement</button>
+      </form>
+      <div id="announcements-admin-list" class="grid grid-2 mt-16"></div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="section-reports" style="display:none">
+      <div class="card">
+        <div class="card-title">Revenue — Last 30 Days</div>
+        <div id="revenue-chart" style="display:flex;align-items:flex-end;gap:4px;height:180px;"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script type="module" src="../js/admin-dashboard.js"></script>
+</body>
+</html>

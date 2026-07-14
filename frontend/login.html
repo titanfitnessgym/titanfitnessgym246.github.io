@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Titan Fitness — Login</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="dot"></span>TITAN FITNESS</a>
+  </div>
+</nav>
+
+<div class="page flex items-center justify-center" style="padding:60px 20px;">
+  <div class="card" style="max-width:400px;width:100%;">
+    <div class="card-title">Sign in</div>
+    <form id="login-form">
+      <div class="field"><label>Email</label><input required type="email" name="email" /></div>
+      <div class="field"><label>Password</label><input required type="password" name="password" /></div>
+      <div class="flex justify-between items-center mt-8" style="font-size:13px;">
+        <label class="flex items-center gap-8" style="text-transform:none;">
+          <input type="checkbox" name="remember" style="width:auto;" checked /> Remember me
+        </label>
+        <a href="#" id="forgot-link" class="muted">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn btn-primary w-full mt-24" id="login-submit">Log in</button>
+    </form>
+    <p class="muted text-center mt-16" style="font-size:13px;">
+      Member accounts are created by admin only.
+    </p>
+  </div>
+</div>
+
+<script type="module" src="js/login.js"></script>
+</body>
+</html>

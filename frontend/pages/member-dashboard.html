@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Titan Fitness — My Dashboard</title>
+<link rel="stylesheet" href="../css/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="dot"></span>TITAN FITNESS</div>
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-link active" data-section="home">Dashboard</div>
+    <div class="nav-link" data-section="attendance">Attendance</div>
+    <div class="nav-section-label">Fitness</div>
+    <div class="nav-link" data-section="goals">Fitness Goals</div>
+    <div class="nav-link" data-section="workout">Workout Plan</div>
+    <div class="nav-link" data-section="diet">Diet Plan</div>
+    <div class="nav-link" data-section="measurements">Body Measurements</div>
+    <div class="nav-link" data-section="photos">Progress Photos</div>
+    <div class="nav-section-label">Gym</div>
+    <div class="nav-link" data-section="announcements">Announcements</div>
+    <div class="nav-link" data-section="trainer">Contact Trainer</div>
+    <div class="nav-link" data-section="support">Support</div>
+    <div class="nav-link" id="logout-link" style="margin-top:auto;color:var(--danger)">Log out</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h1 id="welcome-heading">Welcome back 👋</h1>
+      <span class="badge badge-muted mono" id="member-id-badge">—</span>
+      <div class="badge badge-muted mono" id="member-clock">—</div>
+    </div>
+
+    <!-- MEMBERSHIP REMINDER BANNER -->
+    <div id="membership-reminder-banner" class="card mt-24" style="display:none;background:linear-gradient(90deg, rgba(255,77,77,0.18), rgba(255,179,71,0.12));border-color:var(--amber);">
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="card-title" style="margin:0;color:var(--amber)">⚠️ Membership Expiring Soon</div>
+          <div class="muted mt-4" id="reminder-text"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <section id="section-home">
+      <div class="grid grid-4">
+        <div class="card stat-tile"><div class="label">Membership Status</div><div class="value" id="stat-status">—</div></div>
+        <div class="card stat-tile"><div class="label">Days Remaining</div><div class="value" id="stat-days">—</div></div>
+        <div class="card stat-tile"><div class="label">Attendance %</div><div class="value" id="stat-attendance">—</div></div>
+        <div class="card stat-tile"><div class="label">Trainer Assigned</div><div class="value" id="stat-trainer" style="font-size:18px">—</div></div>
+      </div>
+      <div class="card mt-24">
+        <div class="card-title">Your Membership Card</div>
+        <div class="plate" id="membership-plate">
+          <div class="plate-top">
+            <div>
+              <div class="plate-brand">TITAN FITNESS</div>
+              <div class="plate-name" id="plate-name">—</div>
+              <div class="plate-id mono" id="plate-id">—</div>
+            </div>
+            <span class="badge badge-muted" id="plate-status-badge">—</span>
+          </div>
+          <div class="plate-bottom">
+            <div>
+              <div class="plate-valid">Valid Till</div>
+              <div class="mono" id="plate-valid-till">—</div>
+            </div>
+            <div class="plate-qr" id="plate-qr"></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-2 mt-24">
+        <div class="card">
+          <div class="card-title">Latest Announcements</div>
+          <div id="home-announcements" class="muted">Loading…</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Notifications</div>
+          <div id="home-notifications" class="muted">No notifications yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ATTENDANCE -->
+    <section id="section-attendance" style="display:none">
+      <div class="card mb-24" style="max-width:520px">
+        <div class="card-title">Mark Attendance</div>
+        <div class="muted" id="attendance-status-note">You can mark your present status for today before 11:00 PM.</div>
+        <div class="flex gap-12 mt-16" style="flex-wrap:wrap;">
+          <button class="btn btn-primary" id="mark-attendance-btn">Mark Present</button>
+          <button class="btn btn-danger" id="unmark-attendance-btn" style="display:none;">Undo Mark Present</button>
+        </div>
+        <div class="muted mt-8" id="undo-count-note" style="display:none;">You have <span id="remaining-undo-count">2</span> undo attempts remaining.</div>
+      </div>
+      <div class="grid grid-4">
+        <div class="card stat-tile"><div class="label">Days Present</div><div class="value" id="att-present">—</div></div>
+        <div class="card stat-tile"><div class="label">Days Missed</div><div class="value" id="att-missed">—</div></div>
+        <div class="card stat-tile"><div class="label">Current Streak</div><div class="value" id="att-streak">—</div></div>
+        <div class="card stat-tile"><div class="label">Longest Streak</div><div class="value" id="att-longest">—</div></div>
+      </div>
+      <div class="card mt-24">
+        <div class="card-title">This Month</div>
+        <div id="att-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;"></div>
+      </div>
+    </section>
+
+    <!-- GOALS -->
+    <section id="section-goals" style="display:none">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-title">Fitness Goals</div>
+          <div class="flex justify-between mt-8"><span class="muted">Current weight</span><span id="goal-current-weight">—</span></div>
+          <div class="flex justify-between mt-8"><span class="muted">Target weight</span><span id="goal-target-weight">—</span></div>
+          <div class="flex justify-between mt-8"><span class="muted">BMI</span><span id="goal-bmi">—</span></div>
+          <div class="flex justify-between mt-8"><span class="muted">Calorie goal</span><span id="goal-calories">—</span></div>
+          <div class="flex justify-between mt-8"><span class="muted">Workout goal</span><span id="goal-workout">—</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Progress</div>
+          <div class="progress-bar mt-16"><div class="fill" id="goal-progress-fill" style="width:0%"></div></div>
+          <div class="muted mt-8" id="goal-progress-label">0% toward target</div>
+        </div>
+      </div>
+      <form id="goal-form" class="card mt-24" style="max-width:720px">
+        <div class="card-title">Edit Goals</div>
+        <div class="field-row">
+          <div class="field"><label>Target weight</label><input name="targetWeight" type="number" /></div>
+          <div class="field"><label>Calorie goal</label><input name="calorieGoal" /></div>
+          <div class="field"><label>Workout goal</label><input name="workoutGoal" /></div>
+        </div>
+        <div class="flex gap-8 mt-16">
+          <button class="btn btn-primary" type="submit">Save Goals</button>
+          <button class="btn btn-ghost" type="button" id="clear-goals-btn">Delete Goals</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- WORKOUT -->
+    <section id="section-workout" style="display:none">
+      <div class="card"><div class="card-title">Weekly Workout Plan</div>
+        <div id="workout-days" class="grid grid-4"></div>
+      </div>
+      <form id="workout-form" class="card mt-24" style="max-width:900px">
+        <div class="card-title">Update Workout Notes</div>
+        <div class="field-row">
+          <div class="field"><label>Monday</label><textarea name="monday" rows="2"></textarea></div>
+          <div class="field"><label>Tuesday</label><textarea name="tuesday" rows="2"></textarea></div>
+          <div class="field"><label>Wednesday</label><textarea name="wednesday" rows="2"></textarea></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Thursday</label><textarea name="thursday" rows="2"></textarea></div>
+          <div class="field"><label>Friday</label><textarea name="friday" rows="2"></textarea></div>
+          <div class="field"><label>Saturday</label><textarea name="saturday" rows="2"></textarea></div>
+        </div>
+        <div class="field"><label>Sunday</label><textarea name="sunday" rows="2"></textarea></div>
+        <button class="btn btn-primary mt-16" type="submit">Save Workout Plan</button>
+      </form>
+    </section>
+
+    <!-- DIET -->
+    <section id="section-diet" style="display:none">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-title">Diet Plan</div>
+          <div id="diet-meals"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Water &amp; Supplements</div>
+          <div class="flex justify-between mt-8"><span class="muted">Water intake</span><span id="diet-water">—</span></div>
+          <div class="muted mt-16">Supplements</div>
+          <ul id="diet-supplements" style="padding-left:18px;margin-top:8px;"></ul>
+        </div>
+      </div>
+      <form id="diet-form" class="card mt-24" style="max-width:900px">
+        <div class="card-title">Update Diet Notes</div>
+        <div class="field-row">
+          <div class="field"><label>Breakfast</label><textarea name="breakfast" rows="2"></textarea></div>
+          <div class="field"><label>Lunch</label><textarea name="lunch" rows="2"></textarea></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Snacks</label><textarea name="snacks" rows="2"></textarea></div>
+          <div class="field"><label>Dinner</label><textarea name="dinner" rows="2"></textarea></div>
+        </div>
+        <button class="btn btn-primary mt-16" type="submit">Save Diet Plan</button>
+      </form>
+    </section>
+
+    <!-- MEASUREMENTS -->
+    <section id="section-measurements" style="display:none">
+      <div class="grid grid-4" id="measurements-grid"></div>
+      <form id="measurements-form" class="card mt-24" style="max-width:900px">
+        <div class="card-title">Add or Update Measurements</div>
+        <div class="field-row">
+          <div class="field"><label>Weight</label><input name="weight" type="number" /></div>
+          <div class="field"><label>Chest</label><input name="chest" type="number" /></div>
+          <div class="field"><label>Waist</label><input name="waist" type="number" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Arms</label><input name="arms" type="number" /></div>
+          <div class="field"><label>Legs</label><input name="legs" type="number" /></div>
+          <div class="field"><label>Body Fat %</label><input name="bodyFatPercent" type="number" /></div>
+        </div>
+        <button class="btn btn-primary mt-16" type="submit">Save Measurements</button>
+      </form>
+    </section>
+
+    <!-- PHOTOS -->
+    <section id="section-photos" style="display:none">
+      <div class="card">
+        <div class="card-title">Progress Photos (Google Drive links)</div>
+        <div class="field-row">
+          <div class="field"><label>Paste a Google Drive share link</label><input id="photo-url-input" placeholder="https://drive.google.com/..." /></div>
+          <div class="field flex items-center" style="align-items:flex-end;"><button class="btn btn-primary" id="add-photo-btn">Add Photo Link</button></div>
+        </div>
+        <div id="photos-grid" class="grid grid-4 mt-16"></div>
+      </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS -->
+    <section id="section-announcements" style="display:none">
+      <div id="announcements-list" class="grid grid-2"></div>
+    </section>
+
+    <!-- TRAINER -->
+    <section id="section-trainer" style="display:none">
+      <div class="card" style="max-width:420px">
+        <div class="card-title">Your Trainer</div>
+        <div id="trainer-info" class="muted">No trainer assigned yet.</div>
+        <div class="flex gap-12 mt-24">
+          <a class="btn btn-primary" id="trainer-whatsapp" href="#">WhatsApp</a>
+          <a class="btn btn-ghost" id="trainer-call" href="#">Call</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUPPORT -->
+    <section id="section-support" style="display:none">
+      <div class="card mb-24">
+        <div class="card-title">Your Tickets</div>
+        <div id="my-tickets" class="grid grid-2"></div>
+      </div>
+      <form id="support-form" class="card" style="max-width:520px">
+        <div class="card-title">Raise a Ticket</div>
+        <div class="field">
+          <label>Type</label>
+          <select name="type"><option value="complaint">Complaint</option><option value="feedback">Feedback</option><option value="suggestion">Suggestion</option></select>
+        </div>
+        <div class="field"><label>Message</label><textarea name="message" rows="4" required></textarea></div>
+        <button type="submit" class="btn btn-primary">Submit Ticket</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script type="module" src="../js/member-dashboard.js"></script>
+</body>
+</html>

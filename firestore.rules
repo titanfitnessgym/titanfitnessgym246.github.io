@@ -1,0 +1,72 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return isSignedIn() &&
+        request.auth.token.role in ['admin', 'owner', 'manager', 'receptionist'];
+    }
+    function isOwnerOf(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      // Members can read their own full document; admins can read/write everyone's.
+      allow read: if isOwnerOf(uid) || isAdmin();
+      allow create: if false; // only the backend (Admin SDK) creates member docs
+      allow update: if isAdmin() || (
+        isOwnerOf(uid) &&
+        // Members may only ever touch these top-level maps' allowed sub-fields;
+        // payment / attendance / membership are never client-writable.
+        !request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['payments', 'attendance', 'membership'])
+      );
+      allow delete: if isAdmin();
+
+      match /attendance/{date} {
+        allow read: if isOwnerOf(uid) || isAdmin();
+        allow write: if isAdmin(); // members cannot self-mark attendance
+      }
+
+      match /supportTickets/{ticketId} {
+        allow read: if isOwnerOf(uid) || isAdmin();
+        allow create: if isOwnerOf(uid);
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    match /plans/{planId} {
+      allow read: if true; // public — shown on registration/renewal
+      allow write: if isAdmin();
+    }
+
+    match /trainers/{trainerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /announcements/{annId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /payments/{paymentId} {
+      allow read: if isAdmin() ||
+        (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow write: if isAdmin();
+    }
+
+    match /counters/{counterId} {
+      allow read, write: if false; // backend Admin SDK only, via transactions
+    }
+
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

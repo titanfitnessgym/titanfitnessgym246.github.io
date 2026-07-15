@@ -1,5 +1,38 @@
 import { authClient, API_BASE } from "./firebase-config.js";
 
+/**
+ * Shared mobile navigation behavior. The dashboard markup keeps the same
+ * sidebar/nav elements and this only adds the responsive presentation layer.
+ */
+export function setupResponsiveSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const backdrop = document.getElementById("sidebar-backdrop");
+  if (!sidebar || !toggle) return;
+
+  const setOpen = (open) => {
+    sidebar.classList.toggle("open", open);
+    backdrop?.classList.toggle("visible", open);
+    document.body.classList.toggle("sidebar-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
+  };
+
+  toggle.addEventListener("click", () => setOpen(!sidebar.classList.contains("open")));
+  backdrop?.addEventListener("click", () => setOpen(false));
+  sidebar.querySelectorAll(".nav-link[data-section]").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) setOpen(false);
+  });
+}
+
+setupResponsiveSidebar();
+
 export function toast(message, type = "info") {
   let root = document.getElementById("toast-root");
   if (!root) {

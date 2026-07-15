@@ -27,8 +27,11 @@ export function setupResponsiveSidebar() {
     if (event.key === "Escape") setOpen(false);
   });
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 900) setOpen(false);
+    if (window.innerWidth > 1100) setOpen(false);
   });
+
+  // Always start closed on mobile/tablet so the drawer never covers content on load.
+  setOpen(false);
 }
 
 setupResponsiveSidebar();

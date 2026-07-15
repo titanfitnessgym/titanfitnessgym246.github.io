@@ -154,17 +154,19 @@ async function loadMembers() {
               <td><span class="badge ${statusBadgeClass(p.status)}">${p.status || "—"}</span></td>
               <td>${ms.plan || "—"}</td>
               <td>${formatDate(ms.renewalDate)}</td>
-              <td class="flex gap-8" style="flex-wrap:wrap;">
-                <button class="btn btn-ghost btn-sm" data-action="view-profile" data-uid="${m.uid}">View Profile</button>
-                <button class="btn btn-ghost btn-sm" data-action="activate" data-uid="${m.uid}">Activate</button>
-                <button class="btn btn-ghost btn-sm" data-action="deactivate" data-uid="${m.uid}">Deactivate</button>
-                <button class="btn btn-ghost btn-sm" data-action="suspend" data-uid="${m.uid}">Suspend</button>
-                <button class="btn btn-ghost btn-sm" data-action="assign-trainer" data-uid="${m.uid}">Assign Trainer</button>
-                <button class="btn btn-ghost btn-sm" data-action="view-attendance" data-uid="${m.uid}">View Attendance</button>
-                <button class="btn btn-ghost btn-sm" data-action="view-progress" data-uid="${m.uid}">View Progress</button>
-                <button class="btn btn-ghost btn-sm" data-action="reset-password" data-uid="${m.uid}">Reset Password</button>
-                <button class="btn btn-ghost btn-sm" data-action="notify" data-uid="${m.uid}">Send Notification</button>
-                <button class="btn btn-danger btn-sm" data-action="delete" data-uid="${m.uid}">Delete Member</button>
+              <td>
+                <div class="table-actions">
+                  <button class="btn btn-ghost btn-sm" data-action="view-profile" data-uid="${m.uid}">View Profile</button>
+                  <button class="btn btn-ghost btn-sm" data-action="activate" data-uid="${m.uid}">Activate</button>
+                  <button class="btn btn-ghost btn-sm" data-action="deactivate" data-uid="${m.uid}">Deactivate</button>
+                  <button class="btn btn-ghost btn-sm" data-action="suspend" data-uid="${m.uid}">Suspend</button>
+                  <button class="btn btn-ghost btn-sm" data-action="assign-trainer" data-uid="${m.uid}">Assign Trainer</button>
+                  <button class="btn btn-ghost btn-sm" data-action="view-attendance" data-uid="${m.uid}">View Attendance</button>
+                  <button class="btn btn-ghost btn-sm" data-action="view-progress" data-uid="${m.uid}">View Progress</button>
+                  <button class="btn btn-ghost btn-sm" data-action="reset-password" data-uid="${m.uid}">Reset Password</button>
+                  <button class="btn btn-ghost btn-sm" data-action="notify" data-uid="${m.uid}">Send Notification</button>
+                  <button class="btn btn-danger btn-sm" data-action="delete" data-uid="${m.uid}">Delete Member</button>
+                </div>
               </td>
             </tr>`;
           })

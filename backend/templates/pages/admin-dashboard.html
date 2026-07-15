@@ -23,11 +23,19 @@
     <div class="nav-link" data-section="reports">Reports</div>
     <div class="nav-link" id="logout-link" style="margin-top:auto;color:var(--danger)">Log out</div>
   </aside>
+  <button type="button" class="sidebar-backdrop" id="sidebar-backdrop" aria-label="Close navigation menu"></button>
 
   <main class="main">
     <div class="topbar">
-      <h1 id="section-title">Dashboard</h1>
-      <div class="badge badge-muted mono" id="admin-clock">—</div>
+      <div class="topbar-title">
+        <button type="button" class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false">
+          <span></span><span></span><span></span><span class="sr-only">Open navigation menu</span>
+        </button>
+        <h1 id="section-title">Dashboard</h1>
+      </div>
+      <div class="topbar-meta">
+        <div class="badge badge-muted mono" id="admin-clock">—</div>
+      </div>
     </div>
 
     <!-- OVERVIEW -->
@@ -192,5 +200,5 @@
 </div>
 
 <script type="module" src="{{ url_for('static', filename='js/admin-dashboard.js') }}"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1b82384a932b8fe',t:'MTc4NDExMTkxOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

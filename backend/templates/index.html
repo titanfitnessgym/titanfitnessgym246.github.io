@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Titan Fitness — Join the Gym</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="brand"><span class="dot"></span>TITAN FITNESS</div>
+    <div class="flex gap-16 items-center">
+      <a href="{{ url_for('login_page') }}" class="btn btn-ghost btn-sm">Member Login</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">Delhi's Member-First Gym Platform</div>
+      <h1>Train harder.<br>Track <span class="accent">everything.</span></h1>
+      <p class="lead">One membership card. Every workout, diet plan, and personal
+        best — tracked in real time, from your phone or at the front desk.</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('login_page') }}" class="btn btn-primary">Member Login</a>
+        <a href="#plans" class="btn btn-ghost">See membership plans</a>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <div class="plate">
+        <div class="plate-top">
+          <div>
+            <div class="plate-brand">TITAN FITNESS</div>
+            <div class="plate-name">Your Name Here</div>
+            <div class="plate-id mono">TITAN-2026-0001</div>
+          </div>
+          <span class="badge badge-success">Active</span>
+        </div>
+        <div class="plate-bottom">
+          <div>
+            <div class="plate-valid">Valid Till</div>
+            <div class="mono">31 Dec 2026</div>
+          </div>
+          <div class="plate-qr">
+            <div style="width:64px;height:64px;background:repeating-linear-gradient(45deg,#000 0 4px,#fff 4px 8px);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="plans">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Membership Plans</div>
+      <h2>Pick a plan. Change it anytime at the front desk.</h2>
+    </div>
+    <div id="plans-grid" class="grid grid-3">
+      <div class="card"><div class="skeleton" style="height:120px"></div></div>
+      <div class="card"><div class="skeleton" style="height:120px"></div></div>
+      <div class="card"><div class="skeleton" style="height:120px"></div></div>
+    </div>
+  </div>
+</section>
+
+
+<script type="module" src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>
